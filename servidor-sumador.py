@@ -41,17 +41,17 @@ try:
                         html += 'Introduce un numero correcto'
                         html += 'un numero correcto'
                         html += htmlend
-                        recvSocket.send("HTTP/1.1 400 Bad request\r\n\r\n"+
+                        recvSocket.send("HTTP/1.1 400 Bad request\r\n\r\n" +
                                 html + "\r\n")
                         recvSocket.close()
                         continue
-                if numero1 == None:
+                if numero1 is None:
                         numero1 = numero
                         html += 'Primer numero: '
                         html += str(numero1)
                         html += '<p>Introduce el segundo</p>'
                         html += htmlend
-                        recvSocket.send("HTTP/1.1 200 OK\r\n\r\n"+
+                        recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
                                 html + "\r\n")
                 else:
                         numero2 = numero
@@ -60,7 +60,7 @@ try:
                         html += '<br/>Segundo numero: ' + str(numero2)
                         html += '<br/><em>Suma:</em> ' + str(suma)
                         html += htmlend
-                        recvSocket.send("HTTP/1.1 200 OK\r\n\r\n"+
+                        recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
                                 html + "\r\n")
                         numero1 = None
                         numero2 = None
