@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#Sergio Carro Albarran
+# Sergio Carro Albarran
 
 import socket
 import random
@@ -37,22 +37,25 @@ try:
                 try:
                         numero = int(dato.split()[1][1:])
                 except ValueError:
-                        print 'Introduce un numero correcto'
                         html += 'Introduce un numero correcto'
                         html += 'un numero correcto'
                         html += htmlend
+
                         recvSocket.send("HTTP/1.1 400 Bad request\r\n\r\n" +
-                                html + "\r\n")
+                                        html + "\r\n")
                         recvSocket.close()
                         continue
+
                 if numero1 is None:
                         numero1 = numero
                         html += 'Primer numero: '
                         html += str(numero1)
                         html += '<p>Introduce el segundo</p>'
                         html += htmlend
+
                         recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
-                                html + "\r\n")
+                                        html + "\r\n")
+
                 else:
                         numero2 = numero
                         suma = numero1 + numero2
@@ -60,10 +63,12 @@ try:
                         html += '<br/>Segundo numero: ' + str(numero2)
                         html += '<br/><em>Suma:</em> ' + str(suma)
                         html += htmlend
+
                         recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
-                                html + "\r\n")
+                                        html + "\r\n")
                         numero1 = None
                         numero2 = None
+                        
                 recvSocket.close()
 
 except KeyboardInterrupt:
