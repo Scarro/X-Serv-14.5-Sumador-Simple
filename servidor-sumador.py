@@ -68,7 +68,7 @@ try:
                                         html + "\r\n")
                         numero1 = None
                         numero2 = None
-                        
+
                 recvSocket.close()
 
 except KeyboardInterrupt:
