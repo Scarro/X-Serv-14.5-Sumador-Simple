@@ -38,7 +38,6 @@ try:
                         numero = int(dato.split()[1][1:])
                 except ValueError:
                         html += 'Introduce un numero correcto'
-                        html += 'un numero correcto'
                         html += htmlend
 
                         recvSocket.send("HTTP/1.1 400 Bad request\r\n\r\n" +
