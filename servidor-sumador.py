@@ -27,6 +27,7 @@ sumando2 = None
 start = '<html><body><h1>'
 end = '</h1></body></html>\r\n'
 
+
 def procesarSuma(numero):
     global sumando1
     global sumando2
@@ -54,7 +55,8 @@ while True:
         query = dato.split()[1][1:]
         if query.decode('UTF-8') == 'favicon.ico':
             # No pongo icono al sumador
-            recvSocket.send(bytes('HTTP/1.1 404 Not Found\r\n\r\n', 'utf-8'))
+            recvSocket.send(bytes('HTTP/1.1 404 ' +
+                            'Not Found\r\n\r\n', 'utf-8'))
             recvSocket.close()
             continue
         else:
