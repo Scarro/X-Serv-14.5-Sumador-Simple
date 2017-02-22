@@ -1,12 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Sergio Carro Albarran
+# Sergio Carro Albarrán
 
 import socket
 import random
 
 
-# Create a TCP objet socket and bind it to a port
+# Create a TCP object socket and bind it to a port
 # Port should be 80, but since it needs root privileges,
 # let's use one above 1024
 
@@ -16,60 +16,66 @@ mySocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 # Bind to the address corresponding to the main name of the host
 mySocket.bind(('localhost', 1234))
 
-# Queue a maximum of 5 TCP connection requests
+# Queue a maximun of 5 TCP conection request
 
 mySocket.listen(5)
 
 # Accept connections, read incoming data, and answer back an HTML page
-#  (in an almost-infinite loop; the loop can be stopped with Ctrl+C)
-numero1 = None
-numero2 = None
+# (in an almost infinite loop; the loop can be stopped with Ctrl+C)
+sumando1 = None
+sumando2 = None
+start = '<html><body><h1>'
+end = '</h1></body></html>\r\n'
 
-try:
-        while True:
-                print 'Waiting for connections'
-                (recvSocket, address) = mySocket.accept()
-                print 'Request received:'
-                dato = recvSocket.recv(1024)
-                print dato
-                html = '<html><body><h1>'
-                htmlend = '</h1></body></html>'
-                try:
-                        numero = int(dato.split()[1][1:])
-                except ValueError:
-                        html += 'Introduce un numero correcto'
-                        html += htmlend
+def procesarSuma(numero):
+    global sumando1
+    global sumando2
+    if sumando1 is None:
+        sumando1 = numero
+        html = start + 'Primer numero: ' + str(sumando1)
+        html += '</br>Introduce el segundo' + end
+    else:
+        sumando2 = numero
+        suma = sumando1 + sumando2
+        html = start + 'Primer numero: ' + str(sumando1)
+        html += '<br/>Segundo numero: ' + str(sumando2)
+        html += '<br/><em>Suma:</em> ' + str(suma) + end
+        sumando1 = None
+        sumando2 = None
+    return html
 
-                        recvSocket.send("HTTP/1.1 400 Bad request\r\n\r\n" +
-                                        html + "\r\n")
-                        recvSocket.close()
-                        continue
-
-                if numero1 is None:
-                        numero1 = numero
-                        html += 'Primer numero: '
-                        html += str(numero1)
-                        html += '<p>Introduce el segundo</p>'
-                        html += htmlend
-
-                        recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
-                                        html + "\r\n")
-
-                else:
-                        numero2 = numero
-                        suma = numero1 + numero2
-                        html += 'Primero numero: ' + str(numero1)
-                        html += '<br/>Segundo numero: ' + str(numero2)
-                        html += '<br/><em>Suma:</em> ' + str(suma)
-                        html += htmlend
-
-                        recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
-                                        html + "\r\n")
-                        numero1 = None
-                        numero2 = None
-
+while True:
+    try:
+        print('Waiting for connections...')
+        (recvSocket, address) = mySocket.accept()
+        print('Request received:')
+        dato = recvSocket.recv(1024)
+        print(dato)
+        query = dato.split()[1][1:];
+        if query.decode('UTF-8') == 'favicon.ico':
+            # No pongo icono al sumador
+            recvSocket.send(bytes('HTTP/1.1 404 Not Found\r\n\r\n','utf-8'))
+            recvSocket.close()
+            continue
+        else:
+            try:
+                numero = int(query)            
+            except ValueError:
+                html = start + 'Introduce un número correcto'
+                html += end
+                recvSocket.send(bytes('HTTP/1.1 400 Bad Request\r\n\r\n' +
+                    html, 'utf-8'))
                 recvSocket.close()
+                continue
 
-except KeyboardInterrupt:
-    print "Servidor cerrado"
-    mySocket.close()
+            html = procesarSuma(numero)
+            print(html)
+            recvSocket.send(bytes('HTTP/1.1 200 OK\r\n\r\n' + 
+                html, 'utf-8'))
+            recvSocket.close()
+
+    except KeyboardInterrupt:
+        break;
+
+mySocket.close()
+print("Closed binded socket")
