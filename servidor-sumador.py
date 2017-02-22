@@ -65,14 +65,15 @@ while True:
             except ValueError:
                 html = start + 'Introduce un número correcto'
                 html += end
-                recvSocket.send(bytes('HTTP/1.1 400 Bad Request\r\n\r\n' + html, 'utf-8'))
+                recvSocket.send(bytes('HTTP/1.1 400 ' +
+                                'Bad Request\r\n\r\n' + html, 'utf-8'))
                 recvSocket.close()
                 continue
 
             html = procesarSuma(numero)
             print(html)
-            recvSocket.send(bytes('HTTP/1.1 200 OK\r\n\r\n' +
-                html, 'utf-8'))
+            recvSocket.send(bytes('HTTP/1.1 200' +
+                            'OK\r\n\r\n' + html, 'utf-8'))
             recvSocket.close()
 
     except KeyboardInterrupt:
