@@ -51,31 +51,31 @@ while True:
         print('Request received:')
         dato = recvSocket.recv(1024)
         print(dato)
-        query = dato.split()[1][1:];
+        query = dato.split()[1][1:]
         if query.decode('UTF-8') == 'favicon.ico':
             # No pongo icono al sumador
-            recvSocket.send(bytes('HTTP/1.1 404 Not Found\r\n\r\n','utf-8'))
+            recvSocket.send(bytes('HTTP/1.1 404 Not Found\r\n\r\n', 'utf-8'))
             recvSocket.close()
             continue
         else:
             try:
-                numero = int(query)            
+                numero = int(query)
             except ValueError:
                 html = start + 'Introduce un número correcto'
                 html += end
                 recvSocket.send(bytes('HTTP/1.1 400 Bad Request\r\n\r\n' +
-                    html, 'utf-8'))
+                                html, 'utf-8'))
                 recvSocket.close()
                 continue
 
             html = procesarSuma(numero)
             print(html)
-            recvSocket.send(bytes('HTTP/1.1 200 OK\r\n\r\n' + 
+            recvSocket.send(bytes('HTTP/1.1 200 OK\r\n\r\n' +
                 html, 'utf-8'))
             recvSocket.close()
 
     except KeyboardInterrupt:
-        break;
+        break
 
 mySocket.close()
 print("Closed binded socket")
